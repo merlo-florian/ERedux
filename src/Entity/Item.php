@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\ItemRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ItemRepository::class)]
 #[ORM\Table(name: "item")]
+#[ApiResource]
 class Item
 {
     #[ORM\Id]
