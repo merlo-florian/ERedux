@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
 
@@ -26,13 +27,19 @@ class MainController extends AbstractController
     }
 
     #[Route('/api/post/create-item', name: 'api_post_create_item', methods: ['POST'])]
-    public function create(Request $request, SerializerInterface $serializer, EntityManagerInterface $em)
+    public function create(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, ValidatorInterface $validator)
     {
 
         $jsonContent = $request->getContent();
         try{
 
         $item = $serializer->deserialize($jsonContent, Item::class, 'json');
+
+        $errors = $validator->validate($item);
+
+        if(count($errors) > 0){
+            return $this->json($errors, 400);
+        }
 
         $em->persist($item);
         $em->flush();
