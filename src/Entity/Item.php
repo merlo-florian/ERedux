@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\ItemRepository;
 use ApiPlatform\Metadata\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -28,6 +30,14 @@ class Item
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     private ?string $type = null;
+
+    #[ORM\OneToMany(targetEntity: CartItem::class, mappedBy: "item_id")]
+    private $carts;
+
+    public function __construct()
+    {
+        $this->carts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -66,6 +76,30 @@ class Item
     public function setType(string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Cart>
+     */
+    public function getCarts(): Collection
+    {
+        return $this->carts;
+    }
+
+    public function addCart(Cart $cart): self
+    {
+        if (!$this->carts->contains($cart)) {
+            $this->carts->add($cart);
+        }
+
+        return $this;
+    }
+
+    public function removeCart(Cart $cart): self
+    {
+        $this->carts->removeElement($cart);
 
         return $this;
     }

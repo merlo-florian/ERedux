@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Item;
+use App\Repository\CartItemRepository;
 use App\Repository\ItemRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,6 +25,14 @@ class MainController extends AbstractController
     {
 
         return $this->json($ItemRepo->findAll(), 200 , []);
+    
+    }
+
+    #[Route('/api/get/items_by_cart_id/{id}', name: 'api_get_items_by_cart_id', methods: ['GET'])]
+    public function readByCartId(int $id, CartItemRepository $CartItemRepo)
+    {
+
+        return $this->json($CartItemRepo->findBy(array('cart_id' => $id)));
     
     }
 

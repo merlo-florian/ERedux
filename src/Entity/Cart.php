@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\CartRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\User;
 
@@ -25,6 +27,14 @@ class Cart
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
+
+    #[ORM\OneToMany(targetEntity: CartItem::class, mappedBy: "cart_id")]
+    private $items;
+
+    public function __construct()
+    {
+        $this->items = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -63,6 +73,30 @@ class Cart
     public function setUser(User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Item>
+     */
+    public function getItems(): Collection
+    {
+        return $this->items;
+    }
+
+    public function addItem(Item $item): self
+    {
+        if (!$this->items->contains($item)) {
+            $this->items->add($item);
+        }
+
+        return $this;
+    }
+
+    public function removeItem(Item $item): self
+    {
+        $this->items->removeElement($item);
 
         return $this;
     }
