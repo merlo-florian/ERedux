@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ItemRepository;
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -19,15 +19,15 @@ class Item
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    private ?string $Name = null;
+    private ?string $name = null;
+
+    #[ORM\Column]
+    #[Assert\NotBlank]
+    private ?int $price = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    private ?string $Price = null;
-
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
-    private ?string $Type = null;
+    private ?string $type = null;
 
     public function getId(): ?int
     {
@@ -36,36 +36,36 @@ class Item
 
     public function getName(): ?string
     {
-        return $this->Name;
+        return $this->name;
     }
 
-    public function setName(string $Name): self
+    public function setName(string $name): self
     {
-        $this->Name = $Name;
+        $this->name = $name;
 
         return $this;
     }
 
     public function getPrice(): ?string
     {
-        return $this->Price;
+        return $this->price;
     }
 
-    public function setPrice(string $Price): self
+    public function setPrice(string $price): self
     {
-        $this->Price = $Price;
+        $this->price = $price;
 
         return $this;
     }
 
     public function getType(): ?string
     {
-        return $this->Type;
+        return $this->type;
     }
 
-    public function setType(string $Type): self
+    public function setType(string $type): self
     {
-        $this->Type = $Type;
+        $this->type = $type;
 
         return $this;
     }
