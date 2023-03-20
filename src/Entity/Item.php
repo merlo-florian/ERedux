@@ -34,6 +34,9 @@ class Item
     #[ORM\OneToMany(targetEntity: CartItem::class, mappedBy: "item_id")]
     private $carts;
 
+    #[ORM\Column(length: 255)]
+    private ?string $img = null;
+
     public function __construct()
     {
         $this->carts = new ArrayCollection();
@@ -100,6 +103,18 @@ class Item
     public function removeCart(Cart $cart): self
     {
         $this->carts->removeElement($cart);
+
+        return $this;
+    }
+
+    public function getImg(): ?string
+    {
+        return $this->img;
+    }
+
+    public function setImg(string $img): self
+    {
+        $this->img = $img;
 
         return $this;
     }
